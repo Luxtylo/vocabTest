@@ -24,24 +24,28 @@ import hashlib
 
 testFile = open("tests/test.txt", "r")
 
-wordList = list()
-
 
 def getCutOffMD5(english):
     return hashlib.md5(english).hexdigest()[:8]
 
-lineNum = 1
-for line in testFile:
-    if lineNum == 1:
-        title = line
-    elif lineNum == 2:
-        dateString = line
-    else:
-        frenchWord = line.split("|")[0]
-        englishWord = line.split("|")[1].lower()
-        englishHash = getCutOffMD5(englishWord.encode())
-        translationTuple = (frenchWord, englishHash)
-        wordList.append(translationTuple)
-    lineNum += 1
 
-print(wordList)
+def getTranslationTuple():
+    wordList = list()
+
+    lineNum = 1
+
+    for line in testFile:
+        if lineNum == 1:
+            title = line
+        elif lineNum == 2:
+            dateString = line
+        else:
+            frenchWord = line.split("|")[0]
+            englishWord = line.split("|")[1].lower()
+            englishHash = getCutOffMD5(englishWord.encode())
+            translationTuple = (frenchWord, englishHash)
+            wordList.append(translationTuple)
+        lineNum += 1
+    return (title, dateString, wordList)
+
+(testTitle, testDateSet, testWordList) = getTranslationTuple()
